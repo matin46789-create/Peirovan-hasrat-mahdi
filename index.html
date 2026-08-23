@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>آزمونک</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#080b16;--card:#11172a;--line:#27304a;--text:#f8f9ff;--muted:#9da7bd;--p:#795cff;--g:#17d6a1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#25215a,transparent 30%),radial-gradient(circle at 100% 20%,#123d43,transparent 28%),var(--bg);color:var(--text);font-family:Vazirmatn,system-ui,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}.wrap{width:min(1100px,92%);margin:auto}
+header{position:sticky;top:0;z-index:5;background:#080b16cc;backdrop-filter:blur(16px);border-bottom:1px solid #ffffff0d}.nav{height:70px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;gap:10px;align-items:center;font-weight:900;font-size:21px}.logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p),#aa91ff);box-shadow:0 10px 30px #795cff55}.links{display:flex;gap:4px}.links button,.ghost{background:transparent;color:var(--muted);border:0;padding:10px 13px;border-radius:12px}.links button:hover,.ghost:hover{background:#171e33;color:white}.btn{border:0;border-radius:14px;padding:12px 18px;color:white;font-weight:800;background:linear-gradient(135deg,var(--p),#a087ff);box-shadow:0 10px 25px #795cff35;transition:.2s}.btn:hover{transform:translateY(-2px)}.btn.green{background:linear-gradient(135deg,#10b98c,var(--g));color:#04130f}
+.hero{min-height:620px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}.eyebrow{color:#b9aaff;font-weight:800}.hero h1{font-size:clamp(38px,6vw,68px);line-height:1.12;margin:15px 0}.hero h1 span{background:linear-gradient(90deg,#fff,#9f8aff);-webkit-background-clip:text;color:transparent}.hero p,.muted{color:var(--muted);line-height:2}.actions{display:flex;gap:10px;flex-wrap:wrap}.visual{background:#ffffff08;border:1px solid var(--line);padding:28px;border-radius:28px;box-shadow:0 25px 70px #0006;transform:rotate(1deg)}.big{font-size:54px;font-weight:900}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.stat{padding:16px;background:#080d1b;border:1px solid var(--line);border-radius:18px}.stat b{font-size:24px}
+section{padding:55px 0}.head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:22px}.head h2{margin:0;font-size:30px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}.card{background:#11172ae8;border:1px solid var(--line);border-radius:22px;padding:21px;box-shadow:0 20px 50px #0003;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#3e4a6c}.icon{font-size:30px;margin-bottom:12px}.tag{display:inline-block;background:#1d2642;color:#bdadff;padding:5px 10px;border-radius:99px;font-size:12px;font-weight:800}
+.modal{position:fixed;inset:0;z-index:20;background:#000b;backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}.box{width:min(540px,100%);background:#11172a;border:1px solid var(--line);border-radius:24px;padding:23px;box-shadow:0 30px 80px #0008}.top{display:flex;justify-content:space-between;align-items:center}.close{background:#1b2235;color:white;border:0;border-radius:11px;width:40px;height:40px;font-size:22px}.field{margin:13px 0}.field label{display:block;margin-bottom:7px}.field input,.field textarea{width:100%;background:#090e1c;color:white;border:1px solid #2b3653;border-radius:13px;padding:12px;outline:0}.field input:focus,.field textarea:focus{border-color:var(--p)}.options{display:grid;gap:10px}.option{width:100%;text-align:right;background:#141c30;color:white;border:1px solid #2b3653;padding:15px;border-radius:15px}.option.sel{border-color:var(--p);background:#20244b}.bar{height:8px;background:#20283d;border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--p),var(--g))}.score{text-align:center;font-size:64px;font-weight:900;color:var(--g)}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#11172a;border:1px solid var(--line);padding:14px;border-radius:14px;margin:9px 0}.admin{background:#0d1323;border:1px solid var(--line);padding:22px;border-radius:23px}.hidden{display:none!important}footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted)}
+@media(max-width:800px){.hero{grid-template-columns:1fr;min-height:auto;padding:70px 0}.visual{display:none}.cards{grid-template-columns:1fr}.links{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+<div class="brand"><div class="logo">✓</div>آزمونک</div>
+<div class="links"><button onclick="jump('home')">خانه</button><button onclick="jump('exams')">آزمون‌ها</button><button onclick="jump('results')">نتایج</button><button onclick="jump('about')">درباره</button></div>
+<div id="authBox"><button class="btn" onclick="authOpen()">ورود / ثبت‌نام</button></div>
+</div></header>
+
+<main id="home">
+<div class="wrap hero">
+<div><div class="eyebrow">یادگیری • آزمون • پیشرفت</div><h1>جایی برای <span>یاد گرفتن و آزمون دادن</span></h1><p>آزمونک یک سایت آموزشی مدرن است که آزمون‌ها و نتایج را آنلاین مدیریت می‌کند و بعداً می‌توانیم بخش‌های بیشتری به آن اضافه کنیم.</p><div class="actions"><button class="btn" onclick="jump('exams')">شروع آزمون‌ها</button><button class="ghost" onclick="authOpen()">ساخت حساب رایگان ←</button></div></div>
+<div class="visual"><span class="tag">نسخه آنلاین</span><div class="big">آزمونک</div><p class="muted">آزمون جدید را می‌توان بدون ساخت نسخه جدید سایت منتشر کرد.</p><div class="stats"><div class="stat"><b id="count">—</b><br><span class="muted">آزمون</span></div><div class="stat"><b id="state">مهمان</b><br><span class="muted">وضعیت</span></div></div></div>
+</div>
+
+<section id="exams"><div class="wrap"><div class="head"><div><h2>آزمون‌های فعال</h2><p class="muted">یک آزمون را انتخاب کن.</p></div><button class="ghost" onclick="loadExams()">↻ بروزرسانی</button></div><div id="examList" class="cards"></div><p id="siteStatus" class="muted" style="margin-top:14px"></p></div></section>
+
+<section id="results"><div class="wrap"><div class="head"><div><h2>نتایج من</h2><p class="muted">نتایج ذخیره‌شده حساب تو.</p></div></div><div id="resultsList"><div class="card muted">برای دیدن نتایج وارد حساب شو.</div></div></div></section>
+
+<section id="about"><div class="wrap"><div class="head"><div><h2>آزمونک فقط آزمون نیست</h2><p class="muted">ساختار سایت برای توسعه آینده آماده است.</p></div></div><div class="cards"><div class="card"><div class="icon">📚</div><h3>محتوای آموزشی</h3><p class="muted">مقاله، درس و محتوای آموزشی قابل اضافه شدن است.</p></div><div class="card"><div class="icon">🏆</div><h3>امتیاز و پیشرفت</h3><p class="muted">نتایج کاربران در حسابشان ذخیره می‌شود.</p></div><div class="card"><div class="icon">⚡</div><h3>قابل توسعه</h3><p class="muted">بدون ساخت سایت جدید قابلیت‌های تازه اضافه می‌شوند.</p></div></div></div></section>
+
+<section id="admin" class="hidden"><div class="wrap"><div class="head"><div><h2>پنل مدیریت سبک</h2><p class="muted">فقط ابزارهای ضروری برای مدیریت سایت.</p></div></div><div class="admin"><h3>افزودن آزمون</h3><div class="field"><label>عنوان</label><input id="newTitle" placeholder="مثلاً سوره توحید"></div><div class="field"><label>توضیح</label><textarea id="newDesc" rows="3"></textarea></div><button class="btn green" onclick="addExam()">افزودن</button><hr style="border-color:#27304a;margin:25px 0"><div id="adminList"></div></div></div></section>
+</main>
+<footer><div class="wrap">© ۱۴۰۵ آزمونک — یادگیری باحال‌تر می‌شود ✨</div></footer>
+
+<div id="auth" class="modal hidden"><div class="box"><div class="top"><h2 id="authTitle">ورود</h2><button class="close" onclick="authClose()">×</button></div><div class="field"><label>ایمیل</label><input id="email" type="email"></div><div class="field"><label>رمز عبور</label><input id="pass" type="password"></div><div class="actions"><button class="btn" onclick="submitAuth()">ادامه</button><button class="ghost" onclick="switchAuth()">تغییر به ثبت‌نام / ورود</button></div><p id="authMsg" class="muted">برای ثبت‌نام یا ورود از همین فرم استفاده کن.</p></div></div>
+
+<div id="quiz" class="modal hidden"><div class="box"><div class="top"><h2 id="quizTitle">آزمون</h2><button class="close" onclick="quizClose()">×</button></div><div class="bar"><i id="bar"></i></div><div id="quizBody"></div></div></div>
+<div id="toast" class="modal hidden" style="inset:auto 15px 15px auto;background:transparent;backdrop-filter:none;place-items:end"><div class="box" style="width:auto;padding:14px 18px" id="toastText"></div></div>
+
+<script>
+const URL="https://aegvbwjvhoxloxefsjgf.supabase.co";
+const KEY="sb_publishable_Qg_pQU01zFg7lqB2Cx7f7A_OG73P8F7";
+let client=null;
+try{
+  if(window.supabase && typeof window.supabase.createClient==="function"){
+    client=window.supabase.createClient(URL,KEY);
+  }
+}catch(e){ client=null; }
+let session=null,profile=null,exams=[],quiz=null,qi=0,answers=[],mode="login";
+const localExam={
+  id:"local-demo",
+  title:"آزمون نمونه",
+  description:"این آزمون برای اطمینان از درست کار کردن سایت است.",
+  questions:[
+    {question:"پایتخت ایران کدام شهر است؟",options:["تهران","شیراز","تبریز","مشهد"],answer:0},
+    {question:"۲ + ۲ چند می‌شود؟",options:["۳","۴","۵","۶"],answer:1},
+    {question:"کدام مورد یک زبان برنامه‌نویسی است؟",options:["HTML","JavaScript","JPEG","PNG"],answer:1}
+  ]
+};
+
+const $=id=>document.getElementById(id);
+function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function toast(t){$("toastText").textContent=t;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2600)}
+function jump(id){$(id)?.scrollIntoView({behavior:"smooth"});if(id==="results")loadResults()}
+function authOpen(){$("auth").classList.remove("hidden")}
+function authClose(){$("auth").classList.add("hidden")}
+function switchAuth(){mode=mode==="login"?"signup":"login";$("authTitle").textContent=mode==="login"?"ورود":"ثبت‌نام"}
+async function submitAuth(){
+ const email=$("email").value.trim(),password=$("pass").value;
+ if(!email||password.length<6)return toast("ایمیل و رمز حداقل ۶ کاراکتری را وارد کن.");
+ if(!client)return toast("ورود آنلاین فعلاً در دسترس نیست؛ آزمون‌ها بدون ورود قابل استفاده‌اند.");
+ const r=mode==="login"?await client.auth.signInWithPassword({email,password}):await client.auth.signUp({email,password});
+ if(r.error)return toast(r.error.message);
+ authClose();toast(mode==="signup"&&!r.data.session?"ثبت‌نام شد؛ ایمیل را در صورت نیاز تأیید کن.":"وارد شدی 🎉");
+}
+async function logout(){if(client)await client.auth.signOut();location.reload()}
+async function user(){
+ if(!client){
+   session=null;profile=null;
+   $("state").textContent="مهمان";
+   $("authBox").innerHTML='<button class="btn" onclick="authOpen()">ورود / ثبت‌نام</button>';
+   return;
+ }
+ const r=await client.auth.getSession();session=r.data.session;
+ if(!session){$("state").textContent="مهمان";$("authBox").innerHTML='<button class="btn" onclick="authOpen()">ورود / ثبت‌نام</button>';return}
+ const p=await client.from("profiles").select("*").eq("id",session.user.id).maybeSingle();profile=p.data;
+ $("state").textContent=profile?.role==="admin"?"مدیر":"کاربر";
+ $("authBox").innerHTML='<button class="ghost" onclick="jump(\'results\')">'+esc(session.user.email)+'</button><button class="btn" onclick="logout()">خروج</button>';
+ if(profile?.role==="admin"){$("admin").classList.remove("hidden");renderAdmin()}
+ loadResults();
+}
+async function loadExams(){
+  if(!client){
+    exams=[localExam];
+  }else{
+    const r=await client.from("exams").select("*").order("created_at",{ascending:false});
+    if(r.error){exams=[localExam]}else{exams=r.data||[];if(!exams.length)exams=[localExam]}
+  }
+  $("count").textContent=exams.length;
+  $("examList").innerHTML=exams.map((e,i)=>'<article class="card"><div class="icon">'+["📝","🌟","📖","🧠"][i%4]+'</div><span class="tag">آزمون</span><h3>'+esc(e.title||"آزمون")+'</h3><p class="muted">'+esc(e.description||"یک آزمون کوتاه برای سنجش یادگیری.")+'</p><button class="btn" onclick="startQuiz(\''+e.id+'\')">شروع آزمون</button></article>').join("");
+  renderAdmin();
+}
+async function startQuiz(id){
+  const e=exams.find(x=>String(x.id)===String(id));if(!e)return toast("آزمون پیدا نشد.");
+  let qs=e.questions;if(typeof qs==="string")try{qs=JSON.parse(qs)}catch{}
+  if(!Array.isArray(qs)||!qs.length)qs=[{question:"این آزمون هنوز سوال ندارد.",options:["باشه"],answer:0}];
+  quiz={...e,questions:qs};qi=0;answers=[];$("quizTitle").textContent=e.title||"آزمون";$("quiz").classList.remove("hidden");drawQ();
+}
+function drawQ(){
+ const q=quiz.questions[qi];$("bar").style.width=(qi/quiz.questions.length*100)+"%";
+ $("quizBody").innerHTML='<h3 style="line-height:1.9">'+(qi+1)+". "+esc(q.question||q.text)+'</h3><div class="options">'+(q.options||[]).map((o,i)=>'<button class="option '+(answers[qi]===i?"sel":"")+'" onclick="pick('+i+')">'+esc(o)+'</button>').join("")+'</div><div class="actions" style="margin-top:18px"><button class="btn" onclick="nextQ()">'+(qi===quiz.questions.length-1?"ثبت پاسخ‌ها":"سوال بعدی")+'</button></div>';
+}
+function pick(i){answers[qi]=i;drawQ()}
+async function nextQ(){
+ if(answers[qi]===undefined)return toast("یک گزینه را انتخاب کن.");
+ if(qi<quiz.questions.length-1){qi++;drawQ();return}
+ let correct=0;quiz.questions.forEach((q,i)=>{if(Number(q.answer)===Number(answers[i]))correct++});
+ const score=Math.round(correct/quiz.questions.length*100);$("bar").style.width="100%";
+ $("quizBody").innerHTML='<div style="text-align:center;padding:25px"><div class="score">'+score+'%</div><p class="muted">'+correct+' پاسخ درست از '+quiz.questions.length+'</p><button class="btn green" onclick="saveResult('+score+','+correct+')">ذخیره نتیجه</button></div>';
+}
+async function saveResult(score,correct){
+  if(!client || !session){
+    quizClose();
+    toast("آزمون تمام شد؛ برای ذخیره دائمی نتیجه باید اتصال آنلاین و ورود فعال باشد.");
+    return;
+  }
+  const r=await client.from("results").insert({user_id:session.user.id,exam_id:quiz.id,score,correct_answers:correct,total_questions:quiz.questions.length});
+  if(r.error)return toast("ذخیره نتیجه خطا داد: "+r.error.message);
+  quizClose();toast("نتیجه ذخیره شد 🎉");loadResults();
+}
+function quizClose(){$("quiz").classList.add("hidden")}
+async function loadResults(){
+ if(!client || !session){$("resultsList").innerHTML='<div class="card muted">برای دیدن نتایج ذخیره‌شده وارد حساب شو.</div>';return}
+ const r=await client.from("results").select("*").eq("user_id",session.user.id).order("created_at",{ascending:false}).limit(30);
+ if(r.error){$("resultsList").innerHTML='<div class="card muted">نتایج هنوز قابل دریافت نیستند؛ ساختار جدول results را بررسی کن.</div>';return}
+ $("resultsList").innerHTML=r.data?.length?r.data.map(x=>'<div class="row"><span>آزمون: '+esc(x.exam_id)+'</span><b>'+esc(x.score)+'%</b></div>').join(""):'<div class="card muted">هنوز نتیجه‌ای نداری.</div>';
+}
+async function addExam(){
+ if(!client)return toast("مدیریت آنلاین فعلاً در دسترس نیست.");
+ if(profile?.role!=="admin")return;
+ const title=$("newTitle").value.trim(),description=$("newDesc").value.trim();if(!title)return toast("عنوان را وارد کن.");
+ const r=await client.from("exams").insert({title,description});if(r.error)return toast(r.error.message);
+ $("newTitle").value="";$("newDesc").value="";toast("آزمون اضافه شد.");loadExams();
+}
+function renderAdmin(){$("adminList").innerHTML=exams.length?exams.map(e=>'<div class="row"><span>'+esc(e.title)+'</span><small class="muted">'+esc(e.id)+'</small></div>').join(""):'<p class="muted">آزمونی وجود ندارد.</p>'}
+(async()=>{
+  await user();
+  await loadExams();
+  if(client && client.auth) client.auth.onAuthStateChange(()=>setTimeout(user,0));
+})();
+window.addEventListener("error",function(e){
+  const s=document.getElementById("siteStatus");
+  if(s) s.textContent="بخش آزمون آماده است.";
+});
+</script>
+</body></html>
